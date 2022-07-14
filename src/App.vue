@@ -1,28 +1,77 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="blue-grey"
+      dark
+      v-if="credentials.isLogin()"
+    >
+      <div class="d-flex align-center">
+        <h2 class="text-center">AGENDA TEMUCO</h2>
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" dark class="mr-4" :to="{ path: '/agenda' }">
+        AGENDA
+      </v-btn>
+      <v-btn color="primary" class="mr-4" :to="{ path: '/cargas' }">
+        CARGA DE TRABAJO
+      </v-btn>
+      <v-btn color="primary" dark class="mr-4" :to="{ path: '/permisos' }">
+        PERMISOS Y LICENCIAS
+      </v-btn>
+      <v-btn color="primary" dark class="mr-4" :to="{ path: '/fiscales' }">
+        FISCALES
+      </v-btn>
+      <el-button type="success" class="mr-4" icon="el-icon-download" round @click="dialog = true"></el-button>
+      <v-btn color="blue-grey lighten-5" text @click="logout()">
+        CERRAR SESIÓN
+      </v-btn>
+    </v-app-bar>
+    <v-main>
+      <router-view/>
+    </v-main>
+    <v-dialog v-model="dialog" width="50%">
+      <v-card>
+        <v-container>
+          <h1>Rangos de fechas para la Agenda</h1>
+          <v-form @submit.prevent="download(desde, hasta)">
+            <v-text-field 
+              type="date" label="DESDE" v-model="desde">
+            </v-text-field>
+            <v-text-field 
+              type="date" label="HASTA" v-model="hasta">
+            </v-text-field>
+            <v-btn 
+              type="submit" color="primary" class="mr-4" block
+              @click.stop="dialog = false"> DESCARGAR
+            </v-btn>
+          </v-form>
+        </v-container>
+      </v-card>
+    </v-dialog>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Credentials from '@/services/Credentials.service'
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data: () => ({
+    credentials: new Credentials(),
+    dialog: false,
+    desde: Date,
+    hasta: Date
+  }),
+  methods: {
+    logout () {
+      let vm = this
+      vm.credentials.clearCredentials()
+      vm.$router.push('/')
+    },
+    download (desde, hasta) {
+      window.open('http://172.17.24.10/apis/api_agenda_temuco/public/api/descarga/' + desde + '/' +  hasta ,'_blank')
+      this.dialog = false
+    },
   }
-}
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
