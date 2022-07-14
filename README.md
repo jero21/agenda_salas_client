@@ -21,6 +21,12 @@ npm run serve
 npm run build
 ```
 
+Este comando crea carpeta **/dist** la cuál contiene el proyecto compilado que se debe llevar al servidor apache.
+para su despliegue edite el archivo **ndex.html** donde se apunte a un **link** o **src** quitando el primer slash (**/**) 
+Por ejemplo:
+-   cómo queda: src="/js/app-legacy.58df838c.js"
+-   cómo debe quedar src="js/app-legacy.58df838c.js"
+
 ### Lints and fixes files
 ```
 npm run lint
