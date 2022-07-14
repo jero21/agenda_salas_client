@@ -1,5 +1,10 @@
 # calendario_temuco
 
+## Requisitos
+```
+- NodeJs >= v16.14.0
+```
+
 ## Project setup
 ```
 npm install
