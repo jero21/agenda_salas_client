@@ -82,11 +82,6 @@
               :color="selectedEvent.color"
               dark
             >
-              <!--
-              <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
-              -->
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-tooltip bottom :color="selectedEvent.color">
@@ -97,9 +92,14 @@
                 </template>
                 <span>Eliminar Registro</span>
               </v-tooltip>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
+              <v-tooltip bottom :color="selectedEvent.color">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon @click="updateEvent(selectedEvent)" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-grease-pencil</v-icon>
+                  </v-btn>
+                </template>
+                <span>Eliminar Registro</span>
+              </v-tooltip>
             </v-toolbar>
             <v-card-text>
               <v-card-subtitle v-html="selectedEvent.sala"></v-card-subtitle>
@@ -127,9 +127,9 @@
             <h1>Agregar Evento</h1>
             <v-form @submit.prevent="addEvent(event)">
               <v-text-field 
-                type="date" label="Seleccione Fecha del registro" v-model="event.start"  v-on:change="selectDate">
+                type="date" label="Seleccione Fecha del registro" v-model="event.start"  v-on:change="selectDate" required>
               </v-text-field>
-              <v-select
+              <v-combobox
                 ref="Sala"
                 label="Seleccione la Sala"
                 :items="tipo_salas"
@@ -138,8 +138,8 @@
                 outlined
                 item-text="nombre"
                 :rules="[v => !!v || 'Item requerido']">
-              </v-select>
-              <v-select
+              </v-combobox>
+              <v-combobox
                 ref="Fiscal"
                 label="Seleccione el Fiscal"
                 :items="fiscales"
@@ -148,7 +148,7 @@
                 outlined
                 item-text="nombre"
                 :rules="[v => !!v || 'Item requerido']">
-              </v-select>
+              </v-combobox>
               <v-text-field 
                 type="text" label="Agregue un Detalle" v-model="event.detail">
               </v-text-field>
@@ -158,7 +158,7 @@
               ></v-checkbox>
               <v-btn 
                 type="submit" color="primary" class="mr-4" block
-                @click.stop="dialog = false"> Agregar
+                @click.stop="dialog = false"> {{nombreBoton}}
               </v-btn>
             </v-form>
           </v-container>
@@ -213,7 +213,8 @@
       end: null,
       detail: null,
       color: '',
-      permisos: []
+      permisos: [],
+      nombreBoton: 'AGREGAR'
     }),
     mounted () {
       this.$refs.calendar.checkChange()
@@ -222,7 +223,6 @@
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
-        console.log('$vuetify.calendar.moreEvents')
       },
       getEventColor (event) {
         return event.color
@@ -254,17 +254,30 @@
       },
       async addEvent (event) {
         try {
+          let vm = this
           if(event.fiscal && event.start && event.sala) {
-            let vm = this
-            registrosService.save(event).then(success => {
-              vm.registro = success.body.registro
-              this.event = {}
-              this.updateRange ()
-            }, err => {
-              if (err.status) {
-                console.log(err)
-              }
-            })
+            if (this.nombreBoton === 'AGREGAR') {
+              registrosService.save(event).then(success => {
+                vm.registro = success.body.registro
+                this.event = {}
+                this.updateRange ()
+              }, err => {
+                if (err.status) {
+                  console.log(err)
+                }
+              })
+            } else if (this.nombreBoton === 'ACTUALIZAR') {
+              console.log(event)
+              registrosService.update(event.id, event).then(success => {
+                vm.registro = success.body.registro
+                this.event = {}
+                this.updateRange ()
+              }, err => {
+                if (err.status) {
+                  console.log(err)
+                }
+              })
+            }
           }
         } catch (error) {
           console.log(error)
@@ -303,6 +316,14 @@
             this.events = arr
           })
         })
+      },
+      updateEvent (event) {
+        this.dialog = true
+        this.event.fiscal = event.fiscal
+        this.event.sala = event.sala
+        this.event.id = event.id
+        this.event.detail = event.detail
+        this.nombreBoton = 'ACTUALIZAR'
       }
     }
   }

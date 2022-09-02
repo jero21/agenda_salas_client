@@ -22,7 +22,18 @@
       <v-btn color="primary" dark class="mr-4" :to="{ path: '/fiscales' }">
         FISCALES
       </v-btn>
-      <el-button type="success" class="mr-4" icon="el-icon-download" round @click="dialog = true"></el-button>
+      <v-btn
+        class="mx-2"
+        @click="dialog = true"
+        fab
+        small
+        color="teal"
+        elevation="2"
+      >
+        <v-icon dark>
+          mdi-file-excel-outline
+        </v-icon>
+      </v-btn>
       <v-btn color="blue-grey lighten-5" text @click="logout()">
         CERRAR SESIÓN
       </v-btn>

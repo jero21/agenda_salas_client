@@ -6,9 +6,9 @@ class CargasTrabajoFiscalService extends Connect {
     super(name)
     this.credentials = new CredentialsService()
   }
-  query () {
-    return this.getResource().get()
+  query (desde, hasta) {
+    return this.getResource().get({desde: desde, hasta: hasta})
   }
 }
 
-export const cargasTrabajoFiscalService = new CargasTrabajoFiscalService('cargas_trabajo_fiscal')
+export const cargasTrabajoFiscalService = new CargasTrabajoFiscalService('cargas_trabajo_fiscal{/desde}{/hasta}')

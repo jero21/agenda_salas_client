@@ -1,15 +1,21 @@
 <template>
   <v-container>
+	<v-row class="text-center" justify="center">
+        <v-col cols="11">
+            <h1>CARGA DE TRABAJO FISCAL</h1>
+            <br>
+	    </v-col>
+        <v-col cols="1">
+            <v-btn color="success" dark :to="{ path: '/cargas' }">
+                ATRAS
+            </v-btn>
+        </v-col>
+	</v-row>
     <v-row class="text-center" justify="center">
-      <v-col cols="11">
-        <h1>CARGA DE TRABAJO</h1>
-			</v-col>
-		</v-row>
-		<br>
 		<v-row>
 			<v-col cols="4">
 					<el-table
-					:data="cargasTipo.jo" >
+					:data="cargasTipo.jo">
 					<el-table-column label="Juicios Orales">
 						<el-table-column
 							prop="fiscal"
@@ -56,6 +62,7 @@
 				</el-table>
 			</v-col>
 		</v-row>
+	</v-row>
 	</v-container>
 </template>
 <script>

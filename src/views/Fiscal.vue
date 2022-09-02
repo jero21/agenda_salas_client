@@ -35,32 +35,48 @@
 						sortable
 						:sort-method="(a, b) => sortData(a, b, 'activo')">
 						<template slot-scope="scope">
-							<el-button type="success" icon="el-icon-check" circle v-if="scope.row.activo"></el-button>
-							<el-button type="danger" icon="el-icon-close" circle v-else></el-button>
+							<v-btn class="mx-1" elevation="1" fab small color="success" v-if="scope.row.activo">
+								<v-icon dark>
+									mdi-check
+								</v-icon>
+    						</v-btn>
+							<v-btn class="mx-1" elevation="1" fab small color="danger" v-else>
+								<v-icon dark>
+									mdi-close
+								</v-icon>
+    						</v-btn>
 						</template>
 					</el-table-column>
 					<el-table-column
 						label="EDITAR FISCAL"
 						width="150">
 						<template template slot-scope="scope">
-							<el-button
-								size="mini"
-								type="primary"
+							<v-btn
+								color="blue"
+								class="ma-2 white--text"
+								small
 								@click="editarFiscal(scope.row)"
-								icon="el-icon-edit">
-							</el-button>
+								>
+									<v-icon	dark>
+										mdi-grease-pencil
+									</v-icon>
+							</v-btn>
 						</template>
 					</el-table-column>
 					<el-table-column
 						label="ELIMINAR FISCAL"
 						width="150">
 						<template template slot-scope="scope">
-							<el-button
-								size="mini"
-								type="primary"
+							<v-btn
+								color="warning"
+								class="ma-2 white--text"
+								small
 								@click="removeFiscal(scope.row)"
-								icon="el-icon-delete-solid">
-							</el-button>
+								>
+									<v-icon	dark>
+										mdi-delete-empty
+									</v-icon>
+							</v-btn>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -84,16 +100,16 @@
 					vm.resFiscales = fiscalesResp.body
 					this.actualizarFiscales()
 				})
-      },
-			async actualizarFiscales() {
-				let vm = this
-				fiscalesService.query().then(fiscalesResp => {
-					vm.fiscales = fiscalesResp.body
-				})		
-			},
-			editarFiscal(row) {
-				this.$router.push({ name: 'EditarFiscal', params: { id: row.id} })
-			}
+      	},
+		async actualizarFiscales() {
+			let vm = this
+			fiscalesService.query().then(fiscalesResp => {
+				vm.fiscales = fiscalesResp.body
+			})		
+		},
+		editarFiscal(row) {
+			this.$router.push({ name: 'EditarFiscal', params: { id: row.id} })
+		}
 	}
   }
 </script>

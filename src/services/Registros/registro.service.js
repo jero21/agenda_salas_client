@@ -6,8 +6,8 @@ class RegistrosService extends Connect {
     super(name)
     this.credentials = new CredentialsService()
   }
-  query () {
-    return this.getResource().get()
+  query (id) {
+    return this.getResource().get({id: id})
   }
 }
 

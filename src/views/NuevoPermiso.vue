@@ -20,7 +20,7 @@
                         v-model="valid"
                         lazy-validation
                     >
-												<v-select
+												<v-combobox
 													ref="Fiscal"
 													label="Seleccione el Fiscal"
 													:items="fiscales"
@@ -29,9 +29,9 @@
 													outlined
 													item-text="nombre"
 													:rules="[v => !!v || 'Item requerido']">
-												</v-select>
+												</v-combobox>
 
-												<v-select
+												<v-combobox
                             label="Seleccione el Tipo de Permiso"
                             :items="tipo_permiso"
                             v-model="permiso.tipo_permiso"
@@ -39,7 +39,7 @@
                             outlined
                             item-text="nombre"
                             :rules="[v => !!v || 'Item requerido']">
-                        </v-select>
+                        </v-combobox>
 
                         <v-text-field 
 													type="date" label="Fecha inicio" v-model="permiso.fecha_inicio" >

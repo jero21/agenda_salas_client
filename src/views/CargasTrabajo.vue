@@ -1,11 +1,46 @@
 <template>
   <v-container>
 	<v-row class="text-center" justify="center">
-	  <v-col cols="11">
-		<h1>CARGAS DE TRABAJO</h1>
-			</v-col>
-		</v-row>
-		<br>
+        <v-col cols="7">
+            <h1>CARGAS DE TRABAJO FISCALES</h1>
+            <br>
+	    </v-col>
+        <v-col cols="5">
+            <v-form>
+				<v-container>
+				<v-row>
+					<v-col
+						cols="12"
+						md="4"
+						>
+						<v-text-field 
+							type="date" label="Fecha Desde" v-model="desde" @change="desdeHasta(desde, hasta)">
+						</v-text-field>
+					</v-col>
+
+					<v-col
+						cols="12"
+						md="4"
+						>
+						<v-text-field 
+							type="date" label="Fecha Hasta" v-model="hasta" @change="desdeHasta(desde, hasta)">
+						</v-text-field>
+					</v-col>
+
+					<v-col
+						cols="12"
+						md="4"
+						>
+						<v-btn color="success" dark>
+							APLICAR
+						</v-btn>
+					</v-col>
+				</v-row>
+				</v-container>
+			</v-form>
+        </v-col>
+	</v-row>
+	<v-row class="text-center" justify="center"></v-row>
 		<v-row  class="text-center" justify="center">
 			<v-col>
 				<el-table
@@ -96,24 +131,34 @@
   export default {
 	data: () => ({
 		cargasFiscal: [],
-		cargasTipo: []
+		cargasTipo: [],
+		desde: null,
+		hasta: null
 	}),
 	mounted () {
-		this.actualizarCargas()
+		// this.actualizarCargas()
 	},
 	methods: {
-			async actualizarCargas() {
-				let vm = this
-				cargasTrabajoFiscalService.query().then(resCargasFiscal => {
-					vm.cargasFiscal = resCargasFiscal.body
-				})
-				cargasTrabajoTipoService.query().then(resCargasTipo => {
-					vm.cargasTipo = resCargasTipo.body
-				})
-			},
-			verCarga(row) {
-				this.$router.push({ name: 'CargaFiscal', params: { id: row.id} })
+		async actualizarCargas() {
+			let vm = this
+			cargasTrabajoFiscalService.query(this.desde, this.hasta).then(resCargasFiscal => {
+				vm.cargasFiscal = resCargasFiscal.body
+			})
+			cargasTrabajoTipoService.query(this.desde, this.hasta).then(resCargasTipo => {
+				vm.cargasTipo = resCargasTipo.body
+			})
+		},
+		verCarga(row) {
+			this.$router.push({ name: 'CargaFiscal', params: { id: row.id} })
+		},
+		desdeHasta(desde, hasta) {
+			if (desde !== null && hasta !== null) {
+				this.actualizarCargas()
 			}
+			
+		}
 	}
+
+
   }
 </script>

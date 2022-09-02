@@ -44,15 +44,19 @@
                 label="Eliminar"
                 width="150">
                 <template template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    @click="removePermiso(scope.row)"
-                    icon="el-icon-delete-solid">
-                  </el-button>
+				  <v-btn
+					color="success"
+					class="ma-2 white--text"
+					small
+					@click="removePermiso(scope.row)"
+					>
+						<v-icon	dark>
+							mdi-delete-empty
+						</v-icon>
+					</v-btn>
                 </template>
               </el-table-column>
-				</el-table>
+			</el-table>
       </v-col>
     </v-row>
   </v-container>
